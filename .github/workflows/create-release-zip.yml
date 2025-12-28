@@ -13,7 +13,7 @@ jobs:
 
       - name: Create zip file
         run: |
-          zip -r el-theme-child.zip . \
+          zip -r el-theme.zip . \
             -x "*.git*" \
             -x ".github/*" \
             -x "*.DS_Store" \
@@ -21,7 +21,7 @@ jobs:
 
       - name: Upload zip to release
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" el-theme-child.zip \
+          gh release upload "${{ github.event.release.tag_name }}" el-theme.zip \
             --repo "${{ github.repository }}" \
             --clobber
         env:
