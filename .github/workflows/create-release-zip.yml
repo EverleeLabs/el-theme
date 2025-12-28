@@ -1,0 +1,28 @@
+name: Create Release Zip
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  create-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create zip file
+        run: |
+          zip -r el-theme-child.zip . \
+            -x "*.git*" \
+            -x ".github/*" \
+            -x "*.DS_Store" \
+            -x "*.zip"
+
+      - name: Upload zip to release
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" el-theme-child.zip \
+            --repo "${{ github.repository }}" \
+            --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
