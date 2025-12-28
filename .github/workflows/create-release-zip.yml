@@ -2,14 +2,32 @@ name: Create Release Zip
 
 on:
   release:
-    types: [created]
+    types: [published, created]
+  workflow_dispatch:
 
 jobs:
   create-zip:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Get release tag
+        id: get_tag
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # For manual runs, get the latest release tag
+            TAG=$(gh api repos/${{ github.repository }}/releases/latest --jq .tag_name)
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+          else
+            # For release events, use the release from the event
+            echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create zip file
         run: |
@@ -21,7 +39,7 @@ jobs:
 
       - name: Upload zip to release
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" el-theme.zip \
+          gh release upload "${{ steps.get_tag.outputs.tag }}" el-theme.zip \
             --repo "${{ github.repository }}" \
             --clobber
         env:
