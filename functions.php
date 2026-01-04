@@ -14,6 +14,14 @@ function el_theme_header_footer_support() {
     add_theme_support( 'fl-theme-builder-headers' );
     add_theme_support( 'fl-theme-builder-footers' );
     add_theme_support( 'fl-theme-builder-parts' );
+    
+    // Register navigation menus
+    register_nav_menus( array(
+        'primary' => __( 'Primary Menu', 'el-theme' ),
+    ) );
+    
+    // Remove block patterns support
+    remove_theme_support( 'core-block-patterns' );
 }
 
 /**

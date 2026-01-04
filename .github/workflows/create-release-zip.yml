@@ -31,11 +31,33 @@ jobs:
 
       - name: Create zip file
         run: |
-          zip -r el-theme.zip . \
-            -x "*.git*" \
-            -x ".github/*" \
-            -x "*.DS_Store" \
-            -x "*.zip"
+          # Create a temporary directory with el-theme folder
+          mkdir -p /tmp/el-theme-release
+          cp -r . /tmp/el-theme-release/el-theme/
+          
+          # Remove files we don't want in the zip
+          cd /tmp/el-theme-release/el-theme
+          rm -rf .git .github *.DS_Store *.zip
+          
+          # If .zipignore exists, exclude those patterns too
+          if [ -f .zipignore ]; then
+            while IFS= read -r pattern; do
+              # Skip empty lines and comments
+              [[ -z "$pattern" || "$pattern" =~ ^# ]] && continue
+              find . -name "$pattern" -type f -delete
+              find . -name "$pattern" -type d -exec rm -rf {} + 2>/dev/null || true
+            done < .zipignore
+          fi
+          
+          # Create the zip file from the parent directory so el-theme is the folder name
+          cd /tmp/el-theme-release
+          zip -r el-theme.zip el-theme/
+          
+          # Move the zip back to the workspace
+          mv el-theme.zip ${{ github.workspace }}/
+          
+          # Clean up temporary directory
+          rm -rf /tmp/el-theme-release
 
       - name: Upload zip to release
         run: |
