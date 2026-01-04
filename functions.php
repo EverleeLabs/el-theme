@@ -15,6 +15,26 @@ function el_theme_header_footer_support() {
     add_theme_support( 'fl-theme-builder-footers' );
     add_theme_support( 'fl-theme-builder-parts' );
     
+    // Let WordPress manage the document title
+    add_theme_support( 'title-tag' );
+    
+    // Add theme support for post thumbnails
+    add_theme_support( 'post-thumbnails' );
+    
+    // Add HTML5 markup support
+    add_theme_support( 'html5', array(
+        'search-form',
+        'comment-form',
+        'comment-list',
+        'gallery',
+        'caption',
+        'style',
+        'script',
+    ) );
+    
+    // Add support for automatic feed links
+    add_theme_support( 'automatic-feed-links' );
+    
     // Register navigation menus
     register_nav_menus( array(
         'primary' => __( 'Primary Menu', 'el-theme' ),
@@ -76,7 +96,7 @@ function el_theme_default_header() {
         $description = get_bloginfo( 'description', 'display' );
         if ( $description || is_customize_preview() ) :
             ?>
-            <p class="site-description"><?php echo $description; ?></p>
+            <p class="site-description"><?php echo esc_html( $description ); ?></p>
         <?php endif; ?>
     </div>
     <?php
@@ -88,7 +108,7 @@ function el_theme_default_header() {
 function el_theme_default_footer() {
     ?>
     <div class="site-info">
-        <p>&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>. All rights reserved.</p>
+        <p>&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>. All rights reserved.</p>
     </div>
     <?php
 }
