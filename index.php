@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<main id="content" class="site-content" role="main">
+<main id="content" class="site-content">
     <?php
     /**
      * Hook: el_theme_before_content
@@ -34,13 +34,18 @@ get_header();
         <div class="el-container">
             <?php if ( have_posts() ) : ?>
 
-                <?php if ( ! is_singular() && ( is_archive() || is_search() ) ) : ?>
+                <?php if ( is_home() && is_front_page() ) : ?>
+                    <?php // Blog on the front page: the page's <h1> is the site name, read by screen readers only. ?>
+                    <h1 class="screen-reader-text"><?php bloginfo( 'name' ); ?></h1>
+                <?php elseif ( ! is_singular() ) : ?>
                     <header class="page-header">
                         <h1 class="page-title">
                             <?php
                             if ( is_search() ) {
                                 /* translators: %s: search query. */
                                 printf( esc_html__( 'Search results for: %s', 'el-theme' ), esc_html( get_search_query() ) );
+                            } elseif ( is_home() ) {
+                                single_post_title();
                             } else {
                                 echo wp_kses_post( get_the_archive_title() );
                             }
@@ -60,7 +65,7 @@ get_header();
 
                             <?php if ( 'post' === get_post_type() ) : ?>
                                 <div class="entry-meta">
-                                    <span class="posted-on"><?php echo esc_html( get_the_date() ); ?></span>
+                                    <span class="posted-on"><time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time></span>
                                     <span class="byline">
                                         <?php
                                         /* translators: %s: post author name. */
@@ -77,7 +82,7 @@ get_header();
                                 the_content();
 
                                 wp_link_pages( array(
-                                    'before' => '<nav class="page-links">' . esc_html__( 'Pages:', 'el-theme' ),
+                                    'before' => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'el-theme' ) . '">' . esc_html__( 'Pages:', 'el-theme' ),
                                     'after'  => '</nav>',
                                 ) );
                                 ?>
@@ -95,11 +100,22 @@ get_header();
                 <?php endif; ?>
 
             <?php else : ?>
-                <article class="no-results">
-                    <h1 class="entry-title"><?php esc_html_e( 'Nothing Found', 'el-theme' ); ?></h1>
-                    <p><?php esc_html_e( "It seems we can't find what you're looking for.", 'el-theme' ); ?></p>
+                <section class="no-results">
+                    <h1 class="page-title">
+                        <?php
+                        if ( is_404() ) {
+                            esc_html_e( 'Page not found', 'el-theme' );
+                        } elseif ( is_search() ) {
+                            /* translators: %s: search query. */
+                            printf( esc_html__( 'No results for: %s', 'el-theme' ), esc_html( get_search_query() ) );
+                        } else {
+                            esc_html_e( 'Nothing found', 'el-theme' );
+                        }
+                        ?>
+                    </h1>
+                    <p><?php esc_html_e( "It seems we can't find what you're looking for. Try a search instead.", 'el-theme' ); ?></p>
                     <?php get_search_form(); ?>
-                </article>
+                </section>
             <?php endif; ?>
         </div>
 

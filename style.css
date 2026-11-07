@@ -5,7 +5,7 @@ Update URI: https://github.com/EverleeLabs/el-theme
 Author: Jamie Van Raalte
 Author URI: https://github.com/jamievanraalte
 Description: A minimal WordPress theme compatible with Beaver Themer. This theme provides the essential files required for WordPress theme recognition and implements full support for Beaver Themer headers, footers, and parts.
-Version: 1.1.0
+Version: 1.1.1
 Requires at least: 6.1
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -78,7 +78,7 @@ body {
     color: var(--el-color-link);
 }
 
-:where(a:hover, a:focus) {
+:where(a:hover) {
     text-decoration: none;
 }
 
@@ -201,6 +201,18 @@ img {
 .el-menu a:focus,
 .el-menu .current-menu-item > a {
     color: var(--el-color-link);
+}
+
+/* Caret so sighted users can tell an item has a dropdown */
+.el-menu .menu-item-has-children > a::after {
+    content: "";
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    margin-left: 0.4em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-0.2em) rotate(45deg);
 }
 
 .el-menu .sub-menu {
