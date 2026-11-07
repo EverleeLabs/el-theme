@@ -21,16 +21,17 @@
     do_action( 'el_theme_before_header' );
     ?>
 
-    <header class="site-header" role="banner">
+    <div class="site-header">
         <?php
         /**
          * Hook: el_theme_header
          * This is where Beaver Themer headers will be rendered
          * If no Beaver Themer header exists, the default theme header will display
+         * Not a <header> itself: Themer outputs its own <header role="banner">
          */
         do_action( 'el_theme_header' );
         ?>
-    </header>
+    </div>
 
     <?php
     /**

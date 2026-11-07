@@ -135,14 +135,14 @@ function el_theme_header_footer_render() {
  * Default theme header (displayed when no Beaver Themer header exists)
  */
 function el_theme_default_header() {
-    // Only the blog home uses an <h1> for the site name; elsewhere the page title is the <h1>.
-    $title_tag = ( is_front_page() && is_home() ) ? 'h1' : 'p';
+    // The site name is never the <h1>; each template outputs its own <h1>
+    // so every page has exactly one, with or without a Themer header.
     ?>
-    <div class="el-default-header">
+    <header class="el-default-header">
         <div class="site-branding">
-            <<?php echo $title_tag; ?> class="site-title">
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-            </<?php echo $title_tag; ?>>
+            <p class="site-title">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"<?php echo is_front_page() ? ' aria-current="page"' : ''; ?>><?php bloginfo( 'name' ); ?></a>
+            </p>
             <?php
             $description = get_bloginfo( 'description', 'display' );
             if ( $description || is_customize_preview() ) :
@@ -163,7 +163,7 @@ function el_theme_default_header() {
                 ?>
             </nav>
         <?php endif; ?>
-    </div>
+    </header>
     <?php
 }
 
@@ -172,14 +172,29 @@ function el_theme_default_header() {
  */
 function el_theme_default_footer() {
     ?>
-    <div class="el-default-footer">
+    <footer class="el-default-footer">
         <p class="site-info">
             &copy; <?php echo esc_html( wp_date( 'Y' ) ); ?>
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>.
             <?php esc_html_e( 'All rights reserved.', 'el-theme' ); ?>
         </p>
-    </div>
+    </footer>
     <?php
+}
+
+/**
+ * Use the theme's wrapper for Beaver Themer content layouts.
+ *
+ * Themer's own template outputs the layout in a plain <div>, so singular,
+ * archive and 404 layouts would have no <main> landmark, no skip link target,
+ * and the Before/After Content part hooks would never fire.
+ */
+add_filter( 'fl_theme_builder_template_include', 'el_theme_themer_template' );
+
+function el_theme_themer_template( $template ) {
+    $theme_template = locate_template( 'themer-content.php' );
+
+    return $theme_template ? $theme_template : $template;
 }
 
 /**

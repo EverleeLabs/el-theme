@@ -6,16 +6,17 @@
     do_action( 'el_theme_before_footer' );
     ?>
 
-    <footer class="site-footer" role="contentinfo">
+    <div class="site-footer">
         <?php
         /**
          * Hook: el_theme_footer
          * This is where Beaver Themer footers will be rendered
          * If no Beaver Themer footer exists, the default theme footer will display
+         * Not a <footer> itself: Themer outputs its own <footer>
          */
         do_action( 'el_theme_footer' );
         ?>
-    </footer>
+    </div>
 
     <?php
     /**
