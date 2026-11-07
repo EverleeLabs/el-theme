@@ -2,7 +2,7 @@ name: Create Release Zip
 
 on:
   release:
-    types: [published, created]
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -28,6 +28,17 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check style.css version matches tag
+        run: |
+          TAG="${{ steps.get_tag.outputs.tag }}"
+          TAG_VERSION="${TAG#v}"
+          THEME_VERSION=$(grep -m1 -E '^Version:' style.css | awk '{print $2}' | tr -d '\r')
+          if [ "$TAG_VERSION" != "$THEME_VERSION" ]; then
+            echo "::error::Release tag ($TAG) does not match style.css Version ($THEME_VERSION). Update style.css and re-release."
+            exit 1
+          fi
+          echo "Version $THEME_VERSION matches tag $TAG"
 
       - name: Create zip file
         run: |

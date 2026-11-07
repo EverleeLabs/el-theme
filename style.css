@@ -1,23 +1,46 @@
 /*
 Theme Name: Everlee Labs Base Theme
 Theme URI: https://github.com/EverleeLabs/el-theme
+Update URI: https://github.com/EverleeLabs/el-theme
 Author: Jamie Van Raalte
 Author URI: https://github.com/jamievanraalte
 Description: A minimal WordPress theme compatible with Beaver Themer. This theme provides the essential files required for WordPress theme recognition and implements full support for Beaver Themer headers, footers, and parts.
-Version: 1.0.2
+Version: 1.1.0
+Requires at least: 6.1
+Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: el-theme
 Tags: minimal, beaver-themer, compatible
 */
 
-/* Base Reset Styles */
+/*
+ * Element styles use :where() (zero specificity) so Beaver Builder modules
+ * and global settings always win without needing !important.
+ */
+
+/* Settings
+--------------------------------------------- */
+:root {
+    --el-color-text: #1f2328;
+    --el-color-muted: #59636e;
+    --el-color-link: #0b5cd5;
+    --el-color-border: #d8dee4;
+    --el-color-surface: #f6f8fa;
+    --el-color-bg: #fff;
+    --el-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --el-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --el-content-width: 760px;
+    --el-wide-width: 1200px;
+    --el-gutter: 20px;
+}
+
+/* Base
+--------------------------------------------- */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 html {
@@ -26,32 +49,375 @@ html {
 
 body {
     margin: 0;
-    padding: 0;
+    background: var(--el-color-bg);
+    color: var(--el-color-text);
+    font-family: var(--el-font);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-img,
-picture,
-video,
-canvas,
-svg {
-    display: block;
-    max-width: 100%;
-}
-
-input,
-button,
-textarea,
-select {
-    font: inherit;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+:where(h1, h2, h3, h4, h5, h6) {
+    line-height: 1.25;
+    font-weight: 600;
     overflow-wrap: break-word;
 }
 
+:where(h1) { font-size: 2.25rem; }
+:where(h2) { font-size: 1.75rem; }
+:where(h3) { font-size: 1.5rem; }
+:where(h4) { font-size: 1.25rem; }
+:where(h5) { font-size: 1.125rem; }
+:where(h6) { font-size: 1rem; }
+
+:where(p) {
+    overflow-wrap: break-word;
+}
+
+:where(a) {
+    color: var(--el-color-link);
+}
+
+:where(a:hover, a:focus) {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+:where(input, button, textarea, select) {
+    font: inherit;
+}
+
+/* Accessibility
+--------------------------------------------- */
+.screen-reader-text {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+    background: var(--el-color-bg);
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+    clip: auto !important;
+    clip-path: none;
+    color: var(--el-color-text);
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    height: auto;
+    left: 5px;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+
+/* Default header & footer (used only when no Themer layout is assigned)
+--------------------------------------------- */
+.el-default-header,
+.el-default-footer {
+    max-width: var(--el-wide-width);
+    margin: 0 auto;
+    padding: 1.25rem var(--el-gutter);
+}
+
+.el-default-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+}
+
+.site-header:has(.el-default-header) {
+    border-bottom: 1px solid var(--el-color-border);
+}
+
+.site-footer:has(.el-default-footer) {
+    border-top: 1px solid var(--el-color-border);
+}
+
+.site-title {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.site-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.site-description {
+    margin: 0.25rem 0 0;
+    color: var(--el-color-muted);
+    font-size: 0.875rem;
+}
+
+.el-default-footer .site-info {
+    margin: 0;
+    color: var(--el-color-muted);
+    font-size: 0.875rem;
+}
+
+/* Primary menu */
+.el-primary-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.el-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+}
+
+.el-menu li {
+    position: relative;
+}
+
+.el-menu a {
+    display: block;
+    padding: 0.25rem 0;
+    color: var(--el-color-text);
+    text-decoration: none;
+}
+
+.el-menu a:hover,
+.el-menu a:focus,
+.el-menu .current-menu-item > a {
+    color: var(--el-color-link);
+}
+
+.el-menu .sub-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 200px;
+    padding: 0.5rem 1rem;
+    background: var(--el-color-bg);
+    border: 1px solid var(--el-color-border);
+}
+
+.el-menu .sub-menu .sub-menu {
+    top: 0;
+    left: 100%;
+}
+
+.el-menu li:hover > .sub-menu,
+.el-menu li:focus-within > .sub-menu {
+    display: block;
+}
+
+/* Content (non-Builder pages, posts and archives)
+--------------------------------------------- */
+.el-container {
+    max-width: var(--el-content-width);
+    margin: 0 auto;
+    padding: 2.5rem var(--el-gutter);
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title,
+.entry-title {
+    margin: 0 0 0.5rem;
+}
+
+.entry-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.entry-title a:hover,
+.entry-title a:focus {
+    color: var(--el-color-link);
+}
+
+.entry-header {
+    margin-bottom: 1.5rem;
+}
+
+.entry-meta {
+    color: var(--el-color-muted);
+    font-size: 0.875rem;
+}
+
+.el-archive-item + .el-archive-item {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--el-color-border);
+}
+
+.el-archive-item .entry-header {
+    margin-bottom: 0.75rem;
+}
+
+.entry-summary > :last-child {
+    margin-bottom: 0;
+}
+
+/* Long-form content */
+.entry-content > :first-child {
+    margin-top: 0;
+}
+
+.entry-content :where(blockquote) {
+    margin: 1.5em 0;
+    padding-left: 1.25em;
+    border-left: 4px solid var(--el-color-border);
+    color: var(--el-color-muted);
+}
+
+.entry-content :where(code, kbd, pre) {
+    font-family: var(--el-font-mono);
+    font-size: 0.9em;
+}
+
+.entry-content :where(code) {
+    padding: 0.1em 0.3em;
+    background: var(--el-color-surface);
+    border-radius: 3px;
+}
+
+.entry-content :where(pre) {
+    padding: 1em;
+    overflow-x: auto;
+    background: var(--el-color-surface);
+    border-radius: 4px;
+}
+
+.entry-content :where(pre code) {
+    padding: 0;
+    background: none;
+}
+
+.entry-content :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+.entry-content :where(th, td) {
+    padding: 0.5em 0.75em;
+    border: 1px solid var(--el-color-border);
+    text-align: left;
+}
+
+.entry-content :where(hr) {
+    margin: 2em 0;
+    border: 0;
+    border-top: 1px solid var(--el-color-border);
+}
+
+.page-links {
+    margin-top: 2rem;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 3rem;
+}
+
+.pagination .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pagination .page-numbers {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--el-color-border);
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.pagination .page-numbers.current {
+    background: var(--el-color-text);
+    border-color: var(--el-color-text);
+    color: var(--el-color-bg);
+}
+
+/* WordPress core classes
+--------------------------------------------- */
+.alignleft {
+    float: left;
+    margin: 0.5em 1.5em 1em 0;
+}
+
+.alignright {
+    float: right;
+    margin: 0.5em 0 1em 1.5em;
+}
+
+.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wp-caption {
+    max-width: 100%;
+    margin-bottom: 1.5em;
+}
+
+.wp-caption img {
+    display: block;
+}
+
+.wp-caption-text,
+.gallery-caption {
+    margin-top: 0.5em;
+    color: var(--el-color-muted);
+    font-size: 0.875rem;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(var(--el-gallery-columns, 3), 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5em;
+}
+
+.gallery-item {
+    margin: 0;
+}
+
+.gallery-columns-1 { --el-gallery-columns: 1; }
+.gallery-columns-2 { --el-gallery-columns: 2; }
+.gallery-columns-3 { --el-gallery-columns: 3; }
+.gallery-columns-4 { --el-gallery-columns: 4; }
+.gallery-columns-5 { --el-gallery-columns: 5; }
+.gallery-columns-6 { --el-gallery-columns: 6; }
+.gallery-columns-7 { --el-gallery-columns: 7; }
+.gallery-columns-8 { --el-gallery-columns: 8; }
+.gallery-columns-9 { --el-gallery-columns: 9; }
+
+@media (max-width: 600px) {
+    :where(h1) { font-size: 1.875rem; }
+    :where(h2) { font-size: 1.5rem; }
+
+    .alignleft,
+    .alignright {
+        float: none;
+        margin: 0 0 1em;
+    }
+}
