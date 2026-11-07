@@ -1,0 +1,166 @@
+/*
+ * Block editor styles.
+ *
+ * Makes the editing area match the front end's content column. This loads
+ * inside the editor canvas, so it can't affect the rest of wp-admin.
+ *
+ * Mirrors the Settings, Base and Long-form content sections of style.css.
+ * Keep them in sync when changing either file.
+ *
+ * Loaded by name rather than reusing style.css because WordPress looks for
+ * editor styles in a child theme first, and would load the child's style.css
+ * instead of this theme's.
+ *
+ * Plain element selectors, not the :where() used in style.css: the editor's
+ * own reset and admin styles would beat zero-specificity rules. Block spacing
+ * uses html :where(...) on purpose, matching the specificity of the core rule
+ * it replaces, so block-specific core rules (such as nested buttons) still win.
+ */
+
+:root {
+    --el-color-text: #1f2328;
+    --el-color-muted: #59636e;
+    --el-color-link: #0b5cd5;
+    --el-color-border: #d8dee4;
+    --el-color-surface: #f6f8fa;
+    --el-color-bg: #fff;
+    --el-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --el-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --el-editor-content-width: 720px; /* --el-content-width minus the side gutters. */
+}
+
+/* Base
+--------------------------------------------- */
+body {
+    background: var(--el-color-bg);
+    color: var(--el-color-text);
+    font-family: var(--el-font);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.25;
+    font-weight: 600;
+    overflow-wrap: break-word;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+    overflow-wrap: break-word;
+}
+
+a {
+    color: var(--el-color-link);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* Blocks: same column width and spacing as the front end
+--------------------------------------------- */
+html :where(.wp-block) {
+    max-width: var(--el-editor-content-width);
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* Browser default heading margins, which the front end uses. */
+html :where(h1.wp-block) { margin-top: 0.67em; margin-bottom: 0.67em; }
+html :where(h2.wp-block) { margin-top: 0.83em; margin-bottom: 0.83em; }
+html :where(h4.wp-block) { margin-top: 1.33em; margin-bottom: 1.33em; }
+html :where(h5.wp-block) { margin-top: 1.67em; margin-bottom: 1.67em; }
+html :where(h6.wp-block) { margin-top: 2.33em; margin-bottom: 2.33em; }
+
+html :where(blockquote.wp-block) {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+html :where(hr.wp-block) {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+/* Matches .entry-content > :first-child */
+html :where(.is-root-container > .wp-block:first-child) {
+    margin-top: 0;
+}
+
+/* Post title: matches .entry-title and the space below .entry-header
+--------------------------------------------- */
+html :where(.editor-post-title.wp-block) {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.editor-post-title {
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+/* Long-form content
+--------------------------------------------- */
+blockquote {
+    padding-left: 1.25em;
+    border-left: 4px solid var(--el-color-border);
+    color: var(--el-color-muted);
+}
+
+code,
+kbd,
+pre {
+    font-family: var(--el-font-mono);
+    font-size: 0.9em;
+}
+
+code {
+    padding: 0.1em 0.3em;
+    background: var(--el-color-surface);
+    border-radius: 3px;
+}
+
+pre {
+    padding: 1em;
+    overflow-x: auto;
+    background: var(--el-color-surface);
+    border-radius: 4px;
+}
+
+pre code {
+    padding: 0;
+    background: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+th,
+td {
+    padding: 0.5em 0.75em;
+    border: 1px solid var(--el-color-border);
+    text-align: left;
+}
+
+hr,
+hr.wp-block-separator {
+    border: 0;
+    border-top: 1px solid var(--el-color-border);
+}

@@ -44,6 +44,22 @@ function el_theme_header_footer_support() {
 
     // Remove block patterns support
     remove_theme_support( 'core-block-patterns' );
+
+    // Make the block editor match the front end
+    add_theme_support( 'editor-styles' );
+    add_editor_style( 'editor-style.css' );
+
+    // Scale embeds to the content column
+    add_theme_support( 'responsive-embeds' );
+}
+
+/**
+ * Maximum width of embeds and media: the content column in style.css.
+ */
+add_action( 'after_setup_theme', 'el_theme_content_width', 0 );
+
+function el_theme_content_width() {
+    $GLOBALS['content_width'] = 720;
 }
 
 /**
