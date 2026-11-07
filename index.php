@@ -38,8 +38,8 @@ get_header();
                     <?php // Blog on the front page: the page's <h1> is the site name, read by screen readers only. ?>
                     <h1 class="screen-reader-text"><?php bloginfo( 'name' ); ?></h1>
                 <?php elseif ( ! is_singular() ) : ?>
-                    <header class="page-header">
-                        <h1 class="page-title">
+                    <header class="page-header el-title-area">
+                        <h1 class="page-title el-page-title">
                             <?php
                             if ( is_search() ) {
                                 /* translators: %s: search query. */
@@ -56,9 +56,9 @@ get_header();
 
                 <?php while ( have_posts() ) : the_post(); ?>
                     <article id="post-<?php the_ID(); ?>" <?php post_class( is_singular() ? '' : 'el-archive-item' ); ?>>
-                        <header class="entry-header">
+                        <header class="entry-header<?php echo is_singular() ? ' el-title-area' : ''; ?>">
                             <?php if ( is_singular() ) : ?>
-                                <h1 class="entry-title"><?php the_title(); ?></h1>
+                                <h1 class="entry-title el-page-title"><?php the_title(); ?></h1>
                             <?php else : ?>
                                 <h2 class="entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                             <?php endif; ?>
@@ -101,7 +101,7 @@ get_header();
 
             <?php else : ?>
                 <section class="no-results">
-                    <h1 class="page-title">
+                    <h1 class="page-title el-page-title">
                         <?php
                         if ( is_404() ) {
                             esc_html_e( 'Page not found', 'el-theme' );
